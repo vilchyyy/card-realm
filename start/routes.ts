@@ -11,11 +11,24 @@ const UsersController = () => import('#controllers/users_controller')
 
 import User from '#models/user'
 import router from '@adonisjs/core/services/router'
+import { middleware } from './kernel.js'
 router.on('/').renderInertia('home', { version: 6 })
-router.get('users', [UsersController, 'index'])
+router
+  .get('logout', async ({ auth, response }) => {
+    await auth.use('web').logout()
+    return response.redirect('/')
+  })
+  .use(middleware.auth())
+
+router.get('users', [UsersController, 'index']).use(middleware.auth())
 router.get('/discord/', async ({ ally }) => {
   ally.use('discord').redirect()
 })
+
+router.get('/login', async ({ ally }) => {
+  ally.use('discord').redirect()
+})
+
 router.get('/discord/redirect', async ({ ally, auth, response }) => {
   const discord = ally.use('discord')
 

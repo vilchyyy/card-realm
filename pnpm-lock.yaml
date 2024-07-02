@@ -20,6 +20,7 @@ specifiers:
   '@japa/plugin-adonisjs': ^3.0.1
   '@japa/runner': ^3.1.4
   '@radix-ui/react-dialog': ^1.1.1
+  '@radix-ui/react-slot': ^1.1.0
   '@swc/core': ^1.6.3
   '@types/luxon': ^3.4.2
   '@types/node': ^20.14.9
@@ -65,6 +66,7 @@ dependencies:
   '@adonisjs/vite': 3.0.0_hqqje7f35uk733v6sziwzb2h2a
   '@inertiajs/react': 1.2.0_react@18.3.1
   '@radix-ui/react-dialog': 1.1.1_ma437sazqanxqsgjws34kond6i
+  '@radix-ui/react-slot': 1.1.0_3vdbhqr2ncalcx7opnshezpx3q
   '@vinejs/vine': 2.1.0
   class-variance-authority: 0.7.0
   clsx: 2.1.1
