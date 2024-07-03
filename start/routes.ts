@@ -8,11 +8,19 @@
 */
 
 const UsersController = () => import('#controllers/users_controller')
-
+const BaseCardsController = () => import('#controllers/base_cards_controller')
 import User from '#models/user'
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
-router.on('/').renderInertia('home', { version: 6 })
+
+router.get('base_cards', [BaseCardsController, 'store'])
+
+router
+  .get('/', async ({ inertia, auth }) => {
+    return inertia.render('home', { user: auth.user })
+  })
+  .use(middleware.auth())
+
 router
   .get('logout', async ({ auth, response }) => {
     await auth.use('web').logout()
@@ -56,5 +64,5 @@ router.get('/discord/redirect', async ({ ally, auth, response }) => {
 
   const newUser = await User.firstOrCreate({ email: user.email }, userDetails)
   await auth.use('web').login(newUser)
-  return response.redirect('/users')
+  return response.redirect('/')
 })
