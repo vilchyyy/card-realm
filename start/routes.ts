@@ -12,6 +12,7 @@ const BaseCardsController = () => import('#controllers/base_cards_controller')
 import User from '#models/user'
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+const DecksController = () => import('#controllers/decks_controller')
 
 router.get('base_cards', [BaseCardsController, 'store'])
 
@@ -36,6 +37,8 @@ router.get('/discord/', async ({ ally }) => {
 router.get('/login', async ({ ally }) => {
   ally.use('discord').redirect()
 })
+
+router.post('/decks', [DecksController, 'store']).use(middleware.auth())
 
 router.get('/discord/redirect', async ({ ally, auth, response }) => {
   const discord = ally.use('discord')

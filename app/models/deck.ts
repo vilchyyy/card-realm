@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasMany, hasOne, manyToMany } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, hasMany, hasOne, manyToMany } from '@adonisjs/lucid/orm'
 import User from './user.js'
-import type { HasMany, HasOne, ManyToMany } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasMany, HasOne, ManyToMany } from '@adonisjs/lucid/types/relations'
 import BaseCard from './base_card.js'
 
 export default class Deck extends BaseModel {
@@ -17,9 +17,14 @@ export default class Deck extends BaseModel {
   @column()
   declare name: string
 
-  @hasOne(() => User)
-  declare userId: HasOne<typeof User>
+  @column()
+  declare userId: number
 
-  @manyToMany(() => BaseCard)
+  @belongsTo(() => User)
+  declare user: BelongsTo<typeof User>
+
+  @manyToMany(() => BaseCard, {
+    pivotTable: 'deck_cards',
+  })
   declare cards: ManyToMany<typeof BaseCard>
 }

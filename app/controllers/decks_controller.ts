@@ -1,3 +1,5 @@
+import BaseCard from '#models/base_card'
+import Deck from '#models/deck'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class DecksController {
@@ -14,9 +16,31 @@ export default class DecksController {
   /**
    * Handle form submission for the create action
    */
-  async store({ request }: HttpContext) {
-    const data = await fetch(request.input('url'))
-    return data
+  async store({ request, auth }: HttpContext) {
+    if (!auth.user) {
+      return 'Unauthorized'
+    }
+    const data = await request.all()
+    const cards = data.deck.split('\n')
+    const deck = new Deck()
+    await deck.related('user').associate(auth.user)
+    for (const card of cards) {
+      let splitCard = [card.split(' ')[0], card.slice(card.indexOf(' ') + 1)]
+      console.log(splitCard)
+      const baseCard = await BaseCard.findByOrFail('name', splitCard[1]).catch(() => {
+        return splitCard[1]
+      })
+      console.log(baseCard)
+      await deck.related('cards').attach({
+        [baseCard.id]: {
+          quantity: Number.parseInt(splitCard[0]),
+        },
+      })
+    }
+    deck.name = data.name
+    deck.save()
+
+    return data.deck
   }
 
   /**

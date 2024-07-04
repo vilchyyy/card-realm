@@ -13,7 +13,9 @@ export default class BaseCard extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
-  @manyToMany(() => Deck)
+  @manyToMany(() => Deck, {
+    pivotTable: 'deck_cards',
+  })
   declare decks: ManyToMany<typeof Deck>
 
   @column()
