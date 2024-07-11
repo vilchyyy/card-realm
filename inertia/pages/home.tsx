@@ -6,7 +6,7 @@ export default function Home(props: { user: any }) {
     <>
       <Head title="Homepage" />
 
-      <div>loo {props.user.email}</div>
+      <div>{props.user.email}</div>
       <div>
         <DecksView />
       </div>

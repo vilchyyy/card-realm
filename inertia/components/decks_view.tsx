@@ -32,7 +32,7 @@ export default function DecksView() {
 
       <Button
         onClick={async () => {
-          await fetch('/base_cards')
+          await router.get('/base_cards')
         }}
       >
         Update Database
