@@ -15,6 +15,7 @@ export default class BaseCard extends BaseModel {
 
   @manyToMany(() => Deck, {
     pivotTable: 'deck_cards',
+    pivotColumns: ['quantity', 'deckId', 'baseCardId'],
   })
   declare decks: ManyToMany<typeof Deck>
 
@@ -44,4 +45,7 @@ export default class BaseCard extends BaseModel {
 
   @column()
   declare flavorText: string
+
+  @column()
+  declare set: string
 }

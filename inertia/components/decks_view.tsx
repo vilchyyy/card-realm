@@ -4,8 +4,9 @@ import { Textarea } from '~/lib/components/ui/textarea'
 import { useState } from 'react'
 import { router } from '@inertiajs/react'
 import { Input } from '~/lib/components/ui/input'
+import Deck from '#models/deck'
 
-export default function DecksView() {
+export default function DecksView(props: { decks: Deck[] }) {
   const [formData, setFormData] = useState({ name: '', deck: '' })
   return (
     <>
@@ -37,13 +38,11 @@ export default function DecksView() {
       >
         Update Database
       </Button>
+      <Button onClick={() => console.log(props.decks)}>Test</Button>
       <div className="flex max-w-3xl flex-wrap justify-center gap-x-4 gap-y-8">
-        <DeckTile />
-        <DeckTile />
-        <DeckTile />
-        <DeckTile />
-        <DeckTile />
-        <DeckTile />
+        {props.decks.map((deck) => (
+          <DeckTile key={deck.id} name={deck.name} cards={deck.cards} />
+        ))}
       </div>
     </>
   )

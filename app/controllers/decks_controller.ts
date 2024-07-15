@@ -24,20 +24,22 @@ export default class DecksController {
     const cards = data.deck.split('\n')
     const deck = new Deck()
     await deck.related('user').associate(auth.user)
+    const fails = []
 
     for (const card of cards) {
       if (card === '') continue
       let splitCard = [card.split(' ')[0], card.slice(card.indexOf(' ') + 1)]
       if (!Number.parseInt(splitCard[0])) {
-        console.log(splitCard[0])
         continue
       }
       if (splitCard[1].includes('/') && !splitCard[1].includes(' // ')) {
         splitCard[1] = splitCard[1].replaceAll('/', ' // ')
       }
       const baseCard = await BaseCard.findByOrFail('name', splitCard[1]).catch(() => {
-        return splitCard[1]
+        fails.push(splitCard[1])
+        return null
       })
+      if (!baseCard) continue
 
       await deck.related('cards').attach({
         [baseCard.id]: {
@@ -49,7 +51,7 @@ export default class DecksController {
     deck.name = data.name
     deck.save()
 
-    return data.deck
+    return deck
   }
 
   /**

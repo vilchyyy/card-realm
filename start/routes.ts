@@ -18,7 +18,14 @@ router.get('base_cards', [BaseCardsController, 'store'])
 
 router
   .get('/', async ({ inertia, auth }) => {
-    return inertia.render('home', { user: auth.user })
+    if (!auth.user) return inertia.render('home', { user: null, decks: [] })
+    const decks = await auth.user
+      .related('decks')
+      .query()
+      .preload('cards', (cardsQuery) => {
+        cardsQuery.preload('baseCard')
+      })
+    return inertia.render('home', { user: auth.user, decks: decks })
   })
   .use(middleware.auth())
 
