@@ -39,6 +39,7 @@ export default function DecksView(props: { decks: Deck[] }) {
         Update Database
       </Button>
       <Button onClick={() => console.log(props.decks)}>Test</Button>
+      <Button onClick={() => router.post('/games')}>New Game</Button>
       <div className="flex max-w-3xl flex-wrap justify-center gap-x-4 gap-y-8">
         {props.decks.map((deck) => (
           <DeckTile key={deck.id} name={deck.name} cards={deck.cards} />

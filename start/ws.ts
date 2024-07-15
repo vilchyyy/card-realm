@@ -10,5 +10,6 @@ app.ready(() => {
   })
   io?.on('connection', (socket) => {
     console.log('A new connection', socket.id)
+    socket.emit('news', { hello: 'world' })
   })
 })

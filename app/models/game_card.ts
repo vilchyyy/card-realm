@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
-import { BelongsTo } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import GamePlayer from './game_player.js'
 import Zone from './zone.js'
 import BaseCard from './base_card.js'
@@ -26,7 +26,7 @@ export default class GameCard extends BaseModel {
   declare baseCard: BelongsTo<typeof BaseCard>
 
   @column()
-  declare baseCardId: number
+  declare baseCardId: string
 
   @belongsTo(() => User)
   declare owner: BelongsTo<typeof User>

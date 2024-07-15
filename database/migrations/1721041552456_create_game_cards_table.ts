@@ -8,7 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.integer('controller_id').references('id').inTable('game_players')
       table.integer('zone_id').references('id').inTable('zones')
-      table.integer('base_card_id').references('id').inTable('base_cards')
+      table.string('base_card_id').references('id').inTable('base_cards')
       table.integer('owner_id').references('id').inTable('users')
       table.boolean('is_faceup').defaultTo(true)
       table.boolean('is_token').defaultTo(false)
