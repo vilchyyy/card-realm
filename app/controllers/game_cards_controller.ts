@@ -1,4 +1,3 @@
 // import type { HttpContext } from '@adonisjs/core/http'
 
-export default class GameCardsController {
-}
+export default class GameCardsController {}

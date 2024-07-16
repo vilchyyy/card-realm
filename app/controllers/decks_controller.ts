@@ -1,5 +1,6 @@
 import BaseCard from '#models/base_card'
 import Deck from '#models/deck'
+import DeckCard from '#models/deck_card'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class DecksController {
@@ -41,11 +42,10 @@ export default class DecksController {
       })
       if (!baseCard) continue
 
-      await deck.related('cards').attach({
-        [baseCard.id]: {
-          quantity: Number.parseInt(splitCard[0]),
-        },
-      })
+      const newDeckCard = new DeckCard()
+      newDeckCard.quantity = Number.parseInt(splitCard[0])
+
+      await deck.related('cards').save(newDeckCard)
     }
 
     deck.name = data.name

@@ -17,6 +17,9 @@ export default class Game extends BaseModel {
   @column()
   declare ownerId: number
 
+  @column()
+  declare started: boolean
+
   @hasMany(() => GamePlayer)
   declare players: HasMany<typeof GamePlayer>
 
