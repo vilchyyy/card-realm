@@ -43,6 +43,7 @@ export default class DecksController {
       if (!baseCard) continue
 
       const newDeckCard = new DeckCard()
+      newDeckCard.baseCardId = baseCard.id
       newDeckCard.quantity = Number.parseInt(splitCard[0])
 
       await deck.related('cards').save(newDeckCard)

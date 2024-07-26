@@ -68,6 +68,8 @@
     "@adonisjs/shield": "^8.1.1",
     "@adonisjs/static": "^1.1.1",
     "@adonisjs/vite": "^3.0.0",
+    "@dnd-kit/core": "^6.1.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@inertiajs/react": "^1.2.0",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-scroll-area": "^1.1.0",

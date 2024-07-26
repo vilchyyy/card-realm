@@ -8,6 +8,7 @@ import Deck from '#models/deck'
 
 export default function DecksView(props: { decks: Deck[] }) {
   const [formData, setFormData] = useState({ name: '', deck: '' })
+  const [displayErrors, setDisplayErrors] = useState(false)
   return (
     <>
       <h1 className="text-white text-3xl font-bold">Decks</h1>
@@ -15,7 +16,9 @@ export default function DecksView(props: { decks: Deck[] }) {
         <Input
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           placeholder="Deck Name"
+          value={formData.name}
         />
+        {!formData.name && <p className="text-red-500">Deck name is required</p>}
         <Textarea
           className="h-[300px]"
           value={formData.deck}
@@ -24,6 +27,10 @@ export default function DecksView(props: { decks: Deck[] }) {
         <Button
           onClick={(e) => {
             e.preventDefault()
+            if (!formData.name) {
+              setDisplayErrors(true)
+              return
+            }
             router.post('/decks', { ...formData })
           }}
         >

@@ -29,7 +29,7 @@ export default class GamesController {
   }
 
   /**
-   * Show individual record
+   * Join a game
    */
   async show({ params, inertia, auth, response }: HttpContext) {
     if (!auth.user || !auth.user.id) {
@@ -43,28 +43,22 @@ export default class GamesController {
     }
 
     const player = await GamePlayer.firstOrNew({ gameId: game?.id, userId: auth.user?.id ?? 0 })
-    const mainZone = await Zone.firstOrNew({
-      gamePlayerId: player.id,
+    player.related('zones').firstOrCreate({
       name: 'main',
       isFaceup: true,
     })
 
-    const deckZone = await Zone.firstOrNew({
-      gamePlayerId: player.id,
+    player.related('zones').firstOrCreate({
       name: 'deck',
       isFaceup: false,
     })
 
-    const handZone = await Zone.firstOrNew({
-      gamePlayerId: player.id,
+    player.related('zones').firstOrCreate({
       name: 'hand',
       isFaceup: true,
     })
 
     await player.save()
-    await mainZone.save()
-    await deckZone.save()
-    await handZone.save()
 
     return inertia.render('game', { game: game, user: auth.user })
   }
