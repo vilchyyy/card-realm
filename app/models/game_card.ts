@@ -31,6 +31,9 @@ export default class GameCard extends BaseModel {
   @belongsTo(() => User)
   declare owner: BelongsTo<typeof User>
 
+  @column()
+  declare ownerId: number
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

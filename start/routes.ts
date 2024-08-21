@@ -19,7 +19,13 @@ router.get('base_cards', [BaseCardsController, 'store'])
 
 router
   .get('/', async ({ inertia, auth }) => {
-    if (!auth.user) return inertia.render('home', { user: null, decks: [] })
+    if (!auth.user)
+      return inertia.render('home', {
+        user: {
+          email: 'test@test.com',
+        },
+        decks: [],
+      })
     const decks = await auth.user
       .related('decks')
       .query()
@@ -52,7 +58,6 @@ router.resource('games', GamesController).use('*', middleware.auth())
 
 router.get('/discord/redirect', async ({ ally, auth, response }) => {
   const discord = ally.use('discord')
-
   if (discord.accessDenied()) {
     return 'Access Denied'
   }

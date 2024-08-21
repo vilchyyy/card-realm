@@ -25,7 +25,6 @@ export default class GamesController {
     game.slots = 5
     game.ownerId = auth.user.id
     await game.save()
-    console.log(game)
   }
 
   /**
@@ -33,7 +32,6 @@ export default class GamesController {
    */
   async show({ params, inertia, auth, response }: HttpContext) {
     if (!auth.user || !auth.user.id) {
-      console.log(auth)
       response.redirect().toPath('/login')
     }
     const game = await Game.find(params.id)
@@ -41,8 +39,7 @@ export default class GamesController {
     if (!game) {
       response.redirect().toPath('/games')
     }
-
-    const player = await GamePlayer.firstOrNew({ gameId: game?.id, userId: auth.user?.id ?? 0 })
+    const player = await GamePlayer.firstOrCreate({ gameId: game?.id, userId: auth.user?.id ?? 0 })
     player.related('zones').firstOrCreate({
       name: 'main',
       isFaceup: true,
@@ -59,8 +56,9 @@ export default class GamesController {
     })
 
     await player.save()
+    const decks = await auth.user?.related('decks').query().select('*')
 
-    return inertia.render('game', { game: game, user: auth.user })
+    return inertia.render('game', { game: game, user: auth.user, decks: decks, player: player })
   }
 
   //   /**
