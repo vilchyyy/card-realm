@@ -48,6 +48,10 @@ router.get('/discord/', async ({ ally }) => {
   ally.use('discord').redirect()
 })
 
+router.get('/cardtest/', async ({ inertia }) => {
+  return inertia.render('cardtest')
+})
+
 router.get('/login', async ({ ally }) => {
   ally.use('discord').redirect()
 })

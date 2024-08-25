@@ -4,7 +4,6 @@ import { InferPageProps } from '@adonisjs/inertia/types'
 import { Head } from '@inertiajs/react'
 import { useEffect, useState } from 'react'
 import { io } from 'socket.io-client'
-import DecksView from '~/components/decks_view'
 import { Button } from '~/lib/components/ui/button'
 import { socket } from '~/socket'
 import { DndContext, DragEndEvent } from '@dnd-kit/core'
@@ -12,11 +11,15 @@ import { Draggable } from '~/components/dnd/draggable'
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '~/lib/components/ui/dialog'
+import { Hand } from '~/components/dnd/hand'
+import { Droppable } from '~/components/dnd/droppable'
+import { MainBoard } from '~/components/dnd/main_board'
+import SortableHorizontalList from '~/components/dnd/sortable_horizontal_list'
+import DragDropContainer from '~/components/dnd/drag_drop_container'
 
 export default function Game(props: InferPageProps<GamesController, 'show'>) {
   const [dragData, setDragData] = useState<any>([])
@@ -26,7 +29,6 @@ export default function Game(props: InferPageProps<GamesController, 'show'>) {
 
   useEffect(() => {
     socket.on(`game-${props.game?.id}`, (data) => {
-      console.log(data)
       setGame(data)
     })
   }, [])
@@ -47,9 +49,7 @@ export default function Game(props: InferPageProps<GamesController, 'show'>) {
     <>
       <DndContext
         onDragEnd={(ev) => {
-          console.log(ev)
           handleDragEnd(ev)
-          console.log(dragData)
         }}
       >
         <Head title="Homepage" />
@@ -94,9 +94,6 @@ export default function Game(props: InferPageProps<GamesController, 'show'>) {
                   (zone: any) => zone.name === 'deck'
                 )
 
-                const handZoneIndex = game.players[playerIndex].zones.findIndex(
-                  (zone: any) => zone.name === 'hand'
-                )
                 const card = game.players[playerIndex].zones[deckZoneIndex].cards[0]
                 setGame((prevGame: any) => ({
                   ...prevGame,
@@ -131,7 +128,7 @@ export default function Game(props: InferPageProps<GamesController, 'show'>) {
             </Button>
 
             <div className="flex flex-wrap">
-              {game &&
+              {/* {game &&
                 game.players
                   .find((player: any) => player.id === props.player.id)
                   .zones.find((zone: any) => zone.name === 'hand')
@@ -149,11 +146,37 @@ export default function Game(props: InferPageProps<GamesController, 'show'>) {
                         <img width={200} src={card.baseCard.image} />
                       </div>
                     </Draggable>
-                  ))}
+                  ))} */}
+              <MainBoard>main board</MainBoard>
             </div>
+            <div>
+              <Hand>
+                {game &&
+                  game.players
+                    .find((player: any) => player.id === props.player.id)
+                    .zones.find((zone: any) => zone.name === 'hand')
+                    .cards.map((card: any) => (
+                      <Draggable
+                        key={card.id}
+                        id={card.id}
+                        style={{
+                          position: '',
+                          top: dragData[card.id]?.transform.y ?? 0,
+                          left: dragData[card.id]?.transform.x ?? 0,
+                        }}
+                      >
+                        <div key={card.baseCard.id}>
+                          <img width={200} src={card.baseCard.image} />
+                        </div>
+                      </Draggable>
+                    ))}
+              </Hand>
+            </div>
+            <SortableHorizontalList />
           </div>
         </div>
       </DndContext>
+      <DragDropContainer />
     </>
   )
 }
